@@ -2,32 +2,39 @@
   <div class="region">
     <p>地区:</p>
     <ul>
-      <li class="active">全部</li>
-      <li>东城区</li>
-      <li>西城区</li>
-      <li>朝阳区</li>
-      <li>丰台区</li>
-      <li>石景山区</li>
-      <li>海淀区</li>
-      <li>门头沟区</li>
-      <li>房山区</li>
-      <li>通州区</li>
-      <li>顺义区</li>
-      <li>昌平区</li>
-      <li>大兴区</li>
-      <li>怀柔区</li>
-      <li>平谷区</li>
-      <li>密云县</li>
-      <li>延庆县</li>
-      <li>延庆镇</li>
-      <li>平谷镇</li>
-      <li>怀柔镇</li>
+      <li :class="activeStr === '' ? 'active' : ''" @click="activeLevel('')">全部</li>
+      <li v-for="item of regionArr" :class="activeStr === item.value.toString() ? 'active' : ''" :key="item.value"
+          @click="activeLevel(item.value)">{{ item.name }}
+      </li>
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
+import {reqHospitalLevelAndRegion} from "@/api/home";
+import {HospitalLevelAndRegion, HospitalLevelAndRegionResponseData} from "@/api/home/type.ts";
+import {onMounted, ref} from "vue";
 
+const regionArr = ref<HospitalLevelAndRegion[]>([]);
+const activeStr = ref('')
+const activeLevel = (value: string) => {
+  activeStr.value = value
+  emit('getRegion', value)
+}
+const emit = defineEmits(['getRegion']);
+
+//获取地区
+const getRegion = async () => {
+  let result: HospitalLevelAndRegionResponseData = await reqHospitalLevelAndRegion('Beijin');
+  //存储医院地区数据
+  if (result.code == 200) {
+    regionArr.value = result.data;
+  }
+}
+
+onMounted(() => {
+  getRegion()
+})
 
 </script>
 

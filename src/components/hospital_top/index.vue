@@ -1,7 +1,7 @@
 <template>
   <div class="top">
     <div class="content">
-      <div class="left">
+      <div class="left" @click="toRouter('/home')">
         <img src="../../assets/images/logo.png" alt="尚医通">
         <p>尚医通 预约挂号统一平台</p>
       </div>
@@ -14,7 +14,12 @@
 </template>
 
 <script setup lang="ts">
+import {useRouter} from "vue-router";
 
+const router = useRouter()
+const toRouter = (path: string) => {
+  router.push(path)
+}
 </script>
 
 <style scoped lang="scss">
@@ -35,6 +40,7 @@
     justify-content: space-between;
 
     .left {
+      cursor: pointer;
       display: flex;
       align-items: center;
 
